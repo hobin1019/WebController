@@ -40,10 +40,10 @@ export default class App extends Component {
       
         {/* search view */}
         <View style={styles.searchBar}>
-          <View style={{flex: 1, height: 20, marginLeft: 5, marginRight: 5}}
+          <View style={styles.searchBarTextInputView}
               backgroundColor='white'>
             <TextInput 
-              style={[{ flex: 1 }, { height: Platform.OS == 'android' ? 30 : null }]}
+              style={styles.searchBarTextInput}
               placeholder='url here'
               value={this.state.searchBarUrl}
               onChangeText={(text) => {
@@ -136,9 +136,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: 30,
     backgroundColor: 'steelblue',
-    marginTop: 30,
+    marginTop: Platform.OS == 'android' ? 0 : 30,
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  searchBarTextInputView: {
+    flex: 1,
+    margin: 5,
+  },
+  searchBarTextInput: {
+    flex: 1,
+    fontSize: 15,
+    paddingVertical: 0,
   },
   topBar: {
     height: 30,
