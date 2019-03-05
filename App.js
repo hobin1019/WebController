@@ -97,7 +97,6 @@ export default class App extends Component {
     this.setState({
       htmlSource: text,
     })
-    this.forceUpdate();
   }
   _onPressWebButton() {
     // console.log('_onPressWebButton');
