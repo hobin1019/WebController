@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
   searchBarTextInput: {
     flex: 1,
     fontSize: 15,
-    paddingVertical: 0,
+    paddingVertical: 0, // for android
   },
   topBar: {
     height: 30,
