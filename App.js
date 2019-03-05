@@ -1,50 +1,186 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- * @lint-ignore-every XPLATJSCOPYRIGHT1
- */
-
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import {Platform, StyleSheet, Text, View, StatusBar, TextInput, TouchableHighlight} from 'react-native';
+import Icon from 'react-native-ionicons'
+import Editor from './Editor'
+import WebPage from './WebPage'
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+// const testAddr = 'http://www.fnguide.com/';
+const testAddr = 'https://m.naver.com/';
+const MENU_STATE = {
+  Web: WebPage,
+  Editor: Editor,
+}
 
-type Props = {};
-export default class App extends Component<Props> {
+export default class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this._onPressWebButton = this._onPressWebButton.bind(this);
+    this._onPressEditorButton = this._onPressEditorButton.bind(this);
+    this._setHtmlSource = this._setHtmlSource.bind(this);
+
+    this.state = {
+      htmlAddr: null,
+      htmlSource: null,
+      MenuState: MENU_STATE.Editor,
+      searchBarUrl: testAddr,
+    } 
+  }
+  componentDidMount(){
+    //get html source
+    this._getSourceFromUrl(this.state.searchBarUrl);
+  }
+
   render() {
+    console.log("render App.js")
+    const {htmlAddr, htmlSource, MenuState} = this.state;
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
+        <StatusBar hidden={false} barStyle='dark-content'/>
+      
+        {/* search view */}
+        <View style={styles.searchBar}>
+          <View style={{flex: 1, height: 20, marginLeft: 5, marginRight: 5}}
+              backgroundColor='white'>
+            <TextInput 
+              style={[{ flex: 1, color: 'black' }, {height: Platform.OS == 'android' ? 30 : null}]} placeholderTextColor='black'
+              value={this.state.searchBarUrl}
+              onChangeText={(text) => {
+                this.setState({searchBarUrl: text})
+              }}/>
+          </View>
+          <TouchableHighlight onPress={() => this._getSourceFromUrl(this.state.searchBarUrl)}>
+              <View>
+                <Icon style={{marginRight: 5}} name='ios-search' color='white' size={20}/>
+              </View>
+          </TouchableHighlight>
+        </View>
+
+        {/* top view */}
+        <View style={styles.topBar}>
+          <View style={styles.menuFavorite}>
+            <Text style={styles.menuText}>즐겨찾기</Text>
+          </View>
+          <View style={styles.menuRecent}>
+            <Text style={styles.menuText}>최근 본 사이트</Text>
+          </View>
+        </View>
+
+        {/* contents view */}
+        <View style={styles.content}>
+          {htmlSource === null ? 
+            <Text>Loading...</Text>
+            : (MenuState === MENU_STATE.Web ? <WebPage htmlSource={htmlSource} htmlAddr={htmlAddr}/> : <Editor setHtmlSource = {this._setHtmlSource} app={this}/>)
+          }
+        </View>
+
+        {/* menu bar */}
+        <View style={styles.menuBar}>
+          {/* 1. web menu */}
+          <TouchableHighlight style={[styles.menuWeb, this.state.MenuState === MENU_STATE.Web ? { backgroundColor: 'steelblue' } : null]} onPress={this._onPressWebButton}>
+            <Text style={styles.menuText}>웹 뷰</Text>
+          </TouchableHighlight>
+          {/* 2. editor menu */}
+          <TouchableHighlight style={[styles.menuEdit, this.state.MenuState === MENU_STATE.Editor ? { backgroundColor: 'steelblue' } : null]} onPress={this._onPressEditorButton}>
+            <Text style={styles.menuText}>에디터</Text>
+          </TouchableHighlight>
+        </View>
+
+
       </View>
     );
+  }
+
+  _setHtmlSource(text){
+    this.setState({
+      htmlSource: text,
+    })
+    this.forceUpdate();
+  }
+  _onPressWebButton() {
+    // console.log('_onPressWebButton');
+    if (this.state.MenuState === MENU_STATE.Web) {return;}
+    this.setState({
+      MenuState: MENU_STATE.Web
+    });
+    // console.log(this.state.MenuState);
+  }
+  _onPressEditorButton() {
+    // console.log('_onPressEditorButton');
+    if (this.state.MenuState === MENU_STATE.Editor) {return;}
+    this.setState({
+      MenuState: MENU_STATE.Editor
+    });
+    // console.log(this.state.MenuState);
+  }
+  _getSourceFromUrl(url) {
+    response = fetch(url)
+    .then((res) => {
+      console.log(res);
+      this.setState({
+        htmlAddr: url,
+        htmlSource: res.text()._55
+      });
+    })
   }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'white',
+  },
+  searchBar: {
+    flexDirection: 'row',
+    height: 30,
+    backgroundColor: 'steelblue',
+    marginTop: 30,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  topBar: {
+    height: 30,
+    flexDirection: 'row',
+    backgroundColor: 'steelblue',
+  },
+  menuFavorite: {
+    flex: 1,
+    borderColor: 'lightgray',
+    borderWidth: 1,
+    backgroundColor: 'steelblue',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
+  menuRecent: {
+    flex: 1,
+    borderColor: 'lightgray',
+    borderWidth: 1,
+    backgroundColor: 'steelblue',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+  content: {
+    flex: 1,
   },
+  menuBar: {
+    height: 30,
+    flexDirection: 'row',
+    backgroundColor: '#FAF4C0',
+  },
+  menuWeb: {
+    flex: 1,
+    backgroundColor: 'lightblue',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  menuEdit: {
+    flex: 1,
+    backgroundColor: 'lightblue',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  menuText: {
+    fontSize: 15,
+    color: 'white',
+  }
 });
