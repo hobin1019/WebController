@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, StatusBar, TextInput, TouchableHighlight} from 'react-native';
+import {Platform, StyleSheet, Text, View, StatusBar, TextInput, TouchableHighlight, AsyncStorage} from 'react-native';
 import Icon from 'react-native-ionicons'
 import Editor from './Editor'
 import WebPage from './WebPage'
+import dataManager from './DataManager';
 
 // const testAddr = 'http://www.fnguide.com/';
 const testAddr = 'https://m.naver.com/';
@@ -25,11 +26,20 @@ export default class App extends Component {
       htmlSource: null,
       MenuState: MENU_STATE.Editor,
       searchBarUrl: testAddr,
+      favoriteList: [],
+      recentSearchList: [],
     } 
   }
-  componentDidMount(){
+  async componentDidMount(){
+
     //get html source
     this._getSourceFromUrl(this.state.searchBarUrl);
+
+    //test
+    this.setState({
+      recentSearchList: await dataManager.getRecentList(),
+    });
+    // dataManager.testRemoveMultiData();
   }
 
   render() {
@@ -95,6 +105,8 @@ export default class App extends Component {
   }
 
   _onPressSearchButton() {
+    tmp = dataManager.setRecentList(this.state.recentSearchList, this.state.searchBarUrl);
+    console.log(tmp);
     this._getSourceFromUrl(this.state.searchBarUrl)
   }
   _onPressWebButton() {
