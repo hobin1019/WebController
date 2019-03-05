@@ -9,8 +9,14 @@ export default class Editor extends Component {
             htmlSource: props.app.state.htmlSource,
         }
     }
+    componentWillReceiveProps() {
+        // console.log("Editor: componentDidMount()")
+        this.setState({
+            htmlSource: this.props.app.state.htmlSource,
+        })
+    }
     render(){
-        // console.log("render Editor.js")
+        // console.log("Editor: render()")
         return (
             <View style={styles.container}>
                 <TextInput 

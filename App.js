@@ -15,6 +15,7 @@ export default class App extends Component {
   constructor(props) {
     super(props);
 
+    this._onPressSearchButton = this._onPressSearchButton.bind(this);
     this._onPressWebButton = this._onPressWebButton.bind(this);
     this._onPressEditorButton = this._onPressEditorButton.bind(this);
     this._setHtmlSource = this._setHtmlSource.bind(this);
@@ -32,7 +33,7 @@ export default class App extends Component {
   }
 
   render() {
-    console.log("render App.js")
+    // console.log("render App.js")
     const {htmlAddr, htmlSource, MenuState} = this.state;
     return (
       <View style={styles.container}>
@@ -51,7 +52,7 @@ export default class App extends Component {
               }}
             />
           </View>
-          <TouchableHighlight onPress={() => this._getSourceFromUrl(this.state.searchBarUrl)}>
+          <TouchableHighlight onPress={this._onPressSearchButton}>
               <View>
                 <Icon style={{marginRight: 5}} name='ios-search' color='white' size={20}/>
               </View>
@@ -93,10 +94,8 @@ export default class App extends Component {
     );
   }
 
-  _setHtmlSource(text){
-    this.setState({
-      htmlSource: text,
-    })
+  _onPressSearchButton() {
+    this._getSourceFromUrl(this.state.searchBarUrl)
   }
   _onPressWebButton() {
     // console.log('_onPressWebButton');
@@ -117,11 +116,16 @@ export default class App extends Component {
   _getSourceFromUrl(url) {
     response = fetch(url)
     .then((res) => {
-      console.log(res);
+      // console.log(res);
       this.setState({
         htmlAddr: url,
         htmlSource: res.text()._55
       });
+    })
+  }
+  _setHtmlSource(text){
+    this.setState({
+      htmlSource: text,
     })
   }
 }
