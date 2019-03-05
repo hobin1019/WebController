@@ -43,11 +43,13 @@ export default class App extends Component {
           <View style={{flex: 1, height: 20, marginLeft: 5, marginRight: 5}}
               backgroundColor='white'>
             <TextInput 
-              style={[{ flex: 1, color: 'black' }, {height: Platform.OS == 'android' ? 30 : null}]} placeholderTextColor='black'
+              style={[{ flex: 1 }, { height: Platform.OS == 'android' ? 30 : null }]}
+              placeholder='url here'
               value={this.state.searchBarUrl}
               onChangeText={(text) => {
                 this.setState({searchBarUrl: text})
-              }}/>
+              }}
+            />
           </View>
           <TouchableHighlight onPress={() => this._getSourceFromUrl(this.state.searchBarUrl)}>
               <View>
