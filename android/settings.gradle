@@ -1,0 +1,3 @@
+rootProject.name = 'WebController'
+
+include ':app'
