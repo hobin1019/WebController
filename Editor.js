@@ -16,21 +16,21 @@ export default class Editor extends Component {
                 <TextInput 
                     style={styles.htmlSource}
                     multiline={true}
-                    value={this.props.app.state.htmlSource}
+                    value={this.state.htmlSource}
                     onChangeText={(text) => {
                         this.setState({
                             htmlSource: text,
                     })}}
                 />
-                <TouchableHighlight style={styles.saveButton} onPress={this._onPressSaveButton}>
+                <TouchableHighlight style={styles.saveButton} onPress={() => this.props.setHtmlSource(this.state.htmlSource)}>
                     <Text>저장</Text>
                 </TouchableHighlight>
             </View>
         );
     }
-    _onPressSaveButton(){
-        this.props.app._setHtmlSource(this.state.htmlSource);
-    }
+    // _onPressSaveButton(){
+    //     this.props.app._setHtmlSource(this.state.htmlSource);
+    // }
 }
 
 const styles = StyleSheet.create({
