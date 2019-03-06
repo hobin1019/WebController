@@ -17,6 +17,7 @@ export default class App extends Component {
     super(props);
 
     this._onPressSearchButton = this._onPressSearchButton.bind(this);
+    this._onPressRecentSearchButton = this._onPressRecentSearchButton.bind(this);
     this._onPressWebButton = this._onPressWebButton.bind(this);
     this._onPressEditorButton = this._onPressEditorButton.bind(this);
     this._setHtmlSource = this._setHtmlSource.bind(this);
@@ -35,7 +36,7 @@ export default class App extends Component {
     //get html source
     this._getSourceFromUrl(this.state.searchBarUrl);
 
-    dataManager.testRemoveMultiData();  //test
+    dataManager.testRemoveMultiData();  //test (remove later)
     this.setState({
       recentSearchList: await dataManager.getRecentList(),
     });
@@ -73,9 +74,9 @@ export default class App extends Component {
           <View style={styles.menuFavorite}>
             <Text style={styles.menuText}>즐겨찾기</Text>
           </View>
-          <View style={styles.menuRecent}>
+          <TouchableHighlight style={styles.menuRecent} onPress={this._onPressRecentSearchButton}>
             <Text style={styles.menuText}>최근 본 사이트</Text>
-          </View>
+          </TouchableHighlight>
         </View>
 
         {/* contents view */}
@@ -105,8 +106,13 @@ export default class App extends Component {
 
   _onPressSearchButton() {
     tmp = dataManager.setRecentList(this.state.recentSearchList, this.state.searchBarUrl);
-    console.log(tmp);
-    this._getSourceFromUrl(this.state.searchBarUrl)
+    this.setState({
+      recentSearchList: tmp,
+    });
+    // console.log(this.state.recentSearchList);
+  }
+  _onPressRecentSearchButton() {
+    console.log(this.state.recentSearchList);
   }
   _onPressWebButton() {
     // console.log('_onPressWebButton');

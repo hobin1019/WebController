@@ -43,7 +43,7 @@ class DataManager {
         }
     }
     setRecentList(urlList, url) {
-        if (urlList[0] === url || url === '') return; // do nothing
+        if (urlList[0] === url || url === '') return urlList; // do nothing
         
         // get idx where url is in urlList
         existIdx = urlList.length - 1;
@@ -60,7 +60,7 @@ class DataManager {
         }
         urlList[0] = url;
 
-        // set Asyncstorage
+        // set Asyncstorage items
         for (var i = 0; i < urlList.length; i++) {
             if (urlList[i] === null) urlList[i] = '';
             AsyncStorage.setItem(this.recentKeyList[i], urlList[i]);
