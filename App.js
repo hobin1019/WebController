@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, StatusBar, TextInput, TouchableHighlight, AsyncStorage} from 'react-native';
+import {Platform, StyleSheet, Text, View, StatusBar, TextInput, TouchableHighlight, Modal} from 'react-native';
 import Icon from 'react-native-ionicons'
 import Editor from './Editor'
 import WebPage from './WebPage'
 import dataManager from './DataManager';
+import RecentSearchView from './PopoverViews/RecentSearchView'
 
 // const testAddr = 'http://www.fnguide.com/';
 const testAddr = 'https://m.naver.com/';
@@ -29,6 +30,7 @@ export default class App extends Component {
       searchBarUrl: testAddr,
       favoriteList: [],
       recentSearchList: [],
+      modalVisible: false,
     } 
   }
   async componentDidMount(){
@@ -40,14 +42,33 @@ export default class App extends Component {
     this.setState({
       recentSearchList: await dataManager.getRecentList(),
     });
+    
+    
+    //test (remove later)... it`s tmp data
+    // tmp = dataManager.setRecentList(this.state.recentSearchList, 'qdsfafasdfasdfasdfasdfasdgdfgsdfgsasdfasdfasddfgsdfgdfg1');
+    // this.setState({
+    //   recentSearchList: tmp,
+    // });
+    // tmp = dataManager.setRecentList(this.state.recentSearchList, 'https://www.naver.com');
+    // this.setState({
+    //   recentSearchList: tmp,
+    // });
+    // tmp = dataManager.setRecentList(this.state.recentSearchList, 'http://www.fnguide.com');
+    // this.setState({
+    //   recentSearchList: tmp,
+    // });
   }
 
   render() {
     // console.log("render App.js")
-    const {htmlAddr, htmlSource, MenuState} = this.state;
+    const {htmlAddr, htmlSource, MenuState, modalVisible} = this.state;
     return (
       <View style={styles.container}>
-        <StatusBar hidden={false} barStyle='dark-content'/>
+        <StatusBar hidden={false} barStyle='dark-content' />
+        
+        <Modal visible={this.state.modalVisible} transparent={true}>
+          <RecentSearchView urlList={this.state.recentSearchList}/>
+        </Modal>
       
         {/* search view */}
         <View style={styles.searchBar}>
@@ -112,6 +133,7 @@ export default class App extends Component {
     // console.log(this.state.recentSearchList);
   }
   _onPressRecentSearchButton() {
+    this.setState({modalVisible: true})
     console.log(this.state.recentSearchList);
   }
   _onPressWebButton() {
