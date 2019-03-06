@@ -23,9 +23,11 @@ class DataManager {
     //         AsyncStorage.setItem(this.recentKeyList[i], 'hi ' + i.toString());
     //     }
     // }
-    // testRemoveMultiData() {
-    //     AsyncStorage.multiRemove(this.recentKeyList);
-    // }
+    testRemoveMultiData() {
+        AsyncStorage.multiRemove(this.recentKeyList);
+    }
+
+    // get array of value from recent Key List
     getRecentList = async () => {
         result = [];
         try {
@@ -41,21 +43,30 @@ class DataManager {
         }
     }
     setRecentList(urlList, url) {
+        if (urlList[0] === url || url === '') return; // do nothing
+        
+        // get idx where url is in urlList
+        existIdx = urlList.length - 1;
         for (var i = 0; i < urlList.length; i++) {
-            if (urlList[i] === url) {
-                if (i === 0) return urlList;
-                for (var j = i - 1; j >= 0; j--) {
-                    urlList[j + 1] = urlList[j];
-                }
-                urlList[0] = url;
-                return urlList;
+            if (urlList[i] === url) { // get url to front
+                existIdx = i;
+                break;
             }
         }
-        // console.log(">> " + urlList);
-        for (var i = urlList.length - 2; i >= 0; i--) {
+
+        // set url to front
+        for (var i = existIdx - 1; i >= 0; i--) {
             urlList[i + 1] = urlList[i];
         }
         urlList[0] = url;
+
+        // set Asyncstorage
+        for (var i = 0; i < urlList.length; i++) {
+            if (urlList[i] === null) urlList[i] = '';
+            AsyncStorage.setItem(this.recentKeyList[i], urlList[i]);
+        }
+
+        // console.log(urlList);
         return urlList;
     }
 

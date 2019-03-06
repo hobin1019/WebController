@@ -35,11 +35,10 @@ export default class App extends Component {
     //get html source
     this._getSourceFromUrl(this.state.searchBarUrl);
 
-    //test
+    dataManager.testRemoveMultiData();  //test
     this.setState({
       recentSearchList: await dataManager.getRecentList(),
     });
-    // dataManager.testRemoveMultiData();
   }
 
   render() {
