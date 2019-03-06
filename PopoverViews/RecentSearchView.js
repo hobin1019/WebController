@@ -14,23 +14,25 @@ export default class RecentSearchView extends Component {
         listLength = this._getListLength();
         return (
             <View style={styles.container}>
-                {listLength === 0 ? null :
-                    <View style={styles.background}>
-                        <View style={styles.diamond} />
-                        <View style={[styles.roundedRect, { height: listLength * (addrHeight + 1) }]}>
-                            {this.props.urlList.map((url, i) => {
-                                if (url === '') return;
-                                return (
-                                    <View>
-                                        <TouchableHighlight underlayColor='lightgray' style={styles.address} onPress={() => this._onPressUrl(url)}>
-                                            <Text>{url}</Text>
-                                        </TouchableHighlight>
-                                        <View style={styles.line}></View>
-                                    </View>
-                                );
-                            })}
+                {listLength === 0 ? (() => this.props.setModalUnvisible()) :
+                    <TouchableHighlight style={styles.background} onPress={() => this.props.setModalUnvisible()}>
+                        <View>
+                            <View style={styles.diamond} />
+                            <View style={[styles.roundedRect, { height: listLength * (addrHeight + 1) }]}>
+                                {this.props.urlList.map((url, i) => {
+                                    if (url === '') return;
+                                    return (
+                                        <View>
+                                            <TouchableHighlight underlayColor='lightgray' style={styles.address} onPress={() => this._onPressUrl(url)}>
+                                                <Text>{url}</Text>
+                                            </TouchableHighlight>
+                                            <View style={styles.line}></View>
+                                        </View>
+                                    );
+                                })}
+                            </View>
                         </View>
-                    </View>
+                    </TouchableHighlight>
                 }
             </View>
         );
@@ -51,6 +53,7 @@ export default class RecentSearchView extends Component {
 
 RecentSearchView.propTypes = {
     urlList: PropTypes.array.isRequired,
+    // _setModalUnvisible: PropTypes.func.isRequired,
 }
 
 const styles = StyleSheet.create({

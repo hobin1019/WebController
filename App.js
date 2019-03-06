@@ -22,6 +22,7 @@ export default class App extends Component {
     this._onPressWebButton = this._onPressWebButton.bind(this);
     this._onPressEditorButton = this._onPressEditorButton.bind(this);
     this._setHtmlSource = this._setHtmlSource.bind(this);
+    this._setModalUnvisible = this._setModalUnvisible.bind(this);
 
     this.state = {
       htmlAddr: null,
@@ -45,6 +46,7 @@ export default class App extends Component {
     
     
     //test (remove later)... it`s tmp data
+    // _onPressSearchButton();
     // tmp = dataManager.setRecentList(this.state.recentSearchList, 'qdsfafasdfasdfasdfasdfasdgdfgsdfgsasdfasdfasddfgsdfgdfg1');
     // this.setState({
     //   recentSearchList: tmp,
@@ -67,7 +69,7 @@ export default class App extends Component {
         <StatusBar hidden={false} barStyle='dark-content' />
         
         <Modal visible={this.state.modalVisible} transparent={true}>
-          <RecentSearchView urlList={this.state.recentSearchList}/>
+          <RecentSearchView urlList={this.state.recentSearchList} setModalUnvisible={this._setModalUnvisible}/>
         </Modal>
       
         {/* search view */}
@@ -165,6 +167,11 @@ export default class App extends Component {
   _setHtmlSource(text){
     this.setState({
       htmlSource: text,
+    })
+  }
+  _setModalUnvisible() {
+    this.setState({
+      modalVisible: false,
     })
   }
 }
