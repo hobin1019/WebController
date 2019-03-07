@@ -135,6 +135,10 @@ export default class App extends Component {
     // console.log(this.state.recentSearchList);
   }
   _onPressRecentSearchButton() {
+    if (this.state.recentSearchList.length === 0 || this.state.recentSearchList[0] === null || this.state.recentSearchList[0] === '') {
+      console.log('_onPressRecentSearchButton return')
+      return;
+    }
     this.setState({modalVisible: true})
     console.log(this.state.recentSearchList);
   }
