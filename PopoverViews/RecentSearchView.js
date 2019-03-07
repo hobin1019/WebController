@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     diamond: {
         top: 0, left: 0, right: 0, bottom: 0,
         position: 'absolute',
-        marginTop: 100,
+        marginTop: Platform.OS == 'android' ? 70 : 100,
         marginLeft: Dimensions.get('window').width * 0.75 - 7.4,
         backgroundColor: 'white',
         width: 15,
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
         height: 100,
         backgroundColor: 'white',
         borderRadius: 8,
-        marginTop: 103,
+        marginTop: Platform.OS == 'android' ? 71 : 103,
         marginLeft: '5%',
     },
     address: {
