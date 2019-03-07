@@ -23,6 +23,7 @@ export default class App extends Component {
     this._onPressEditorButton = this._onPressEditorButton.bind(this);
     this._setHtmlSource = this._setHtmlSource.bind(this);
     this._setModalUnvisible = this._setModalUnvisible.bind(this);
+    this._setSearchBarUrlAndSearch = this._setSearchBarUrlAndSearch.bind(this)
 
     this.state = {
       htmlAddr: null,
@@ -62,14 +63,17 @@ export default class App extends Component {
   }
 
   render() {
-    // console.log("render App.js")
+    console.log("render App.js")
     const {htmlAddr, htmlSource, MenuState, modalVisible} = this.state;
     return (
       <View style={styles.container}>
         <StatusBar hidden={false} barStyle='dark-content' />
         
         <Modal visible={this.state.modalVisible} transparent={true}>
-          <RecentSearchView urlList={this.state.recentSearchList} setModalUnvisible={this._setModalUnvisible}/>
+          <RecentSearchView
+            urlList={this.state.recentSearchList}
+            setModalUnvisible={this._setModalUnvisible}
+            setSearchBarUrlAndSearch={(url) => this._setSearchBarUrlAndSearch(url)}/>
         </Modal>
       
         {/* search view */}
@@ -81,6 +85,7 @@ export default class App extends Component {
               placeholder='url here'
               value={this.state.searchBarUrl}
               onChangeText={(text) => {
+                console.log('text changed')
                 this.setState({searchBarUrl: text})
               }}
             />
@@ -127,16 +132,24 @@ export default class App extends Component {
     );
   }
 
+  //--------------------------- onPress
   _onPressSearchButton() {
-    tmp = dataManager.setRecentList(this.state.recentSearchList, this.state.searchBarUrl);
-    this.setState({
-      recentSearchList: tmp,
-    });
+    url = this.state.searchBarUrl
+    response = fetch(url)
+    .then((res) => {
+      // console.log(res);
+      tmp = dataManager.setRecentList(this.state.recentSearchList, url);
+      this.setState({
+        htmlAddr: url,
+        htmlSource: res.text()._55,
+        recentSearchList: tmp,
+      });
+    })
     // console.log(this.state.recentSearchList);
   }
   _onPressRecentSearchButton() {
     if (this.state.recentSearchList.length === 0 || this.state.recentSearchList[0] === null || this.state.recentSearchList[0] === '') {
-      console.log('_onPressRecentSearchButton return')
+      // console.log('_onPressRecentSearchButton return')
       return;
     }
     this.setState({modalVisible: true})
@@ -158,6 +171,8 @@ export default class App extends Component {
     });
     // console.log(this.state.MenuState);
   }
+
+  //--------------------------- private
   _getSourceFromUrl(url) {
     response = fetch(url)
     .then((res) => {
@@ -168,6 +183,8 @@ export default class App extends Component {
       });
     })
   }
+
+  //--------------------------- public
   _setHtmlSource(text){
     this.setState({
       htmlSource: text,
@@ -176,6 +193,20 @@ export default class App extends Component {
   _setModalUnvisible() {
     this.setState({
       modalVisible: false,
+    })
+  }
+  _setSearchBarUrlAndSearch(url) {
+    response = fetch(url)
+    .then((res) => {
+      // console.log(res);
+      tmp = dataManager.setRecentList(this.state.recentSearchList, url);
+      this.setState({
+        htmlAddr: url,
+        htmlSource: res.text()._55,
+        recentSearchList: tmp,
+        searchBarUrl: url,
+        modalVisible: false,
+      });
     })
   }
 }

@@ -8,6 +8,7 @@ export default class RecentSearchView extends Component {
     constructor(props) {
         super(props);
 
+        this._onPressUrl = this._onPressUrl.bind(this);
         this._getListLength = this._getListLength.bind(this);
     }
     render() {
@@ -38,7 +39,8 @@ export default class RecentSearchView extends Component {
         );
     }
     _onPressUrl(url) {
-        //
+        // console.log(url);
+        this.props.setSearchBarUrlAndSearch(url);
     }
     _getListLength() {
         count = 0;
