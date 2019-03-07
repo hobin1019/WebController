@@ -5,6 +5,7 @@ import Editor from './Editor'
 import WebPage from './WebPage'
 import dataManager from './DataManager';
 import RecentSearchView from './PopoverViews/RecentSearchView'
+import PopupListView from './PopoverViews/PopupListView'
 
 // const testAddr = 'http://www.fnguide.com/';
 const testAddr = 'https://m.naver.com/';
@@ -19,6 +20,7 @@ export default class App extends Component {
 
     this._onPressSearchButton = this._onPressSearchButton.bind(this);
     this._onPressRecentSearchButton = this._onPressRecentSearchButton.bind(this);
+    this._onPressFavoriteButton = this._onPressFavoriteButton.bind(this);
     this._onPressWebButton = this._onPressWebButton.bind(this);
     this._onPressEditorButton = this._onPressEditorButton.bind(this);
     this._setHtmlSource = this._setHtmlSource.bind(this);
@@ -40,7 +42,7 @@ export default class App extends Component {
     //get html source
     this._getSourceFromUrl(this.state.searchBarUrl);
 
-    dataManager.testRemoveMultiData();  //test (remove later)
+    // dataManager.testRemoveMultiData();  //test (remove later)
     this.setState({
       recentSearchList: await dataManager.getRecentList(),
     });
@@ -99,11 +101,13 @@ export default class App extends Component {
 
         {/* top view */}
         <View style={styles.topBar}>
-          <View style={styles.menuFavorite}>
-            <Text style={styles.menuText}>즐겨찾기</Text>
-          </View>
+          {/* 1. recent search button */}
           <TouchableHighlight style={styles.menuRecent} onPress={this._onPressRecentSearchButton}>
             <Text style={styles.menuText}>최근 본 사이트</Text>
+          </TouchableHighlight>
+          {/* 2. favorite button */}
+          <TouchableHighlight style={styles.menuFavorite} onPress={this._onPressFavoriteButton}>
+            <Text style={styles.menuText}>즐겨찾기</Text>
           </TouchableHighlight>
         </View>
 
@@ -154,6 +158,9 @@ export default class App extends Component {
     }
     this.setState({modalVisible: true})
     console.log(this.state.recentSearchList);
+  }
+  _onPressFavoriteButton() {
+    console.log('_onPressFavoriteButton');
   }
   _onPressWebButton() {
     // console.log('_onPressWebButton');

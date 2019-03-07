@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View, Dimensions, TouchableHighlight} from 'react-native';
-import {WebView} from 'react-native-webview';
 import PropTypes from 'prop-types'
 
 const addrHeight = 30;
@@ -21,7 +20,7 @@ export default class RecentSearchView extends Component {
                             <View style={styles.diamond} />
                             <View style={[styles.roundedRect, { height: listLength * (addrHeight + 1) }]}>
                                 {this.props.urlList.map((url, i) => {
-                                    if (url === '') return;
+                                    if (url === '' || url === null) return;
                                     return (
                                         <View>
                                             <TouchableHighlight underlayColor='lightgray' style={styles.address} onPress={() => this._onPressUrl(url)}>
@@ -70,7 +69,7 @@ const styles = StyleSheet.create({
         top: 0, left: 0, right: 0, bottom: 0,
         position: 'absolute',
         marginTop: Platform.OS == 'android' ? 70 : 100,
-        marginLeft: Dimensions.get('window').width * 0.75 - 7.4,
+        marginLeft: Dimensions.get('window').width * 0.25 - 7.4,
         backgroundColor: 'white',
         width: 15,
         height: 15,
