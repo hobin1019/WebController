@@ -19,6 +19,7 @@ export default class App extends Component {
   constructor(props) {
     super(props);
 
+    this._onPressStarButton = this._onPressStarButton.bind(this);
     this._onPressSearchButton = this._onPressSearchButton.bind(this);
     this._onPressTopMenuButton = this._onPressTopMenuButton.bind(this);
     this._onPressWebButton = this._onPressWebButton.bind(this);
@@ -74,7 +75,7 @@ export default class App extends Component {
 
   render() {
     // console.log("render App.js")
-    const { htmlAddr, htmlSource, MenuState, modalVisible, opendModalState } = this.state;
+    const { htmlAddr, htmlSource, MenuState, modalVisible, opendModalState, } = this.state;
     favIncUrl = this.state.favoriteList.includes(this.state.searchBarUrl)
     return (
       <View style={styles.container}>
@@ -93,7 +94,7 @@ export default class App extends Component {
       
         {/* search view */}
         <View style={styles.searchBar}>
-          <TouchableOpacity onPress={this._onPressSearchButton}>
+          <TouchableOpacity onPress={this._onPressStarButton}>
             <View>
               {favIncUrl ?
                 <Icon style={{ marginLeft: 5 }} name='star' color='#FFBB00' size={20} />
@@ -159,6 +160,19 @@ export default class App extends Component {
   }
 
   //--------------------------- onPress
+  _onPressStarButton() {
+    // console.log('favIncUrl : ' + favIncUrl);
+    if (favIncUrl) {
+      // delete from Favorite List
+      tmp = dataManager.deleteFromFavList(this.state.favoriteList, this.state.searchBarUrl)
+      // console.log('tmp : ' + tmp);
+      this.setState({
+        favoriteList: tmp,
+      })
+    } else {
+      // set to the top(= index 0) of Favorite List
+    }
+  }
   _onPressSearchButton() {
     url = this.state.searchBarUrl
     response = fetch(url)
@@ -181,7 +195,7 @@ export default class App extends Component {
       modalVisible: true,
       opendModalState: flag
     })
-    console.log(list);
+    // console.log(list);
   }
 
   _onPressWebButton() {

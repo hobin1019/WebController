@@ -20,7 +20,7 @@ class DataManager {
             this.favoriteKeyList.push(STORAGE_KEY.favorite + i.toString());
         }
         // console.log(this.recentKeyList);
-        console.log(this.favoriteKeyList);
+        // console.log(this.favoriteKeyList);
     }
 
     testSetData() {
@@ -47,6 +47,7 @@ class DataManager {
         try {
             for (var i = 0; i < recentSearchListLength; i++) {
                 data = await AsyncStorage.getItem(this.recentKeyList[i]);
+                if (data === null) data = '';
                 result.push(data);
             }
             // console.log("result : " + result);
@@ -61,6 +62,8 @@ class DataManager {
         try {
             for (var i = 0; i < favoriteListLenght; i++) {
                 data = await AsyncStorage.getItem(this.favoriteKeyList[i]);
+                console.log('### getFavoriteList: ' + data);
+                if (data === null) data = '';
                 result.push(data);
             }
             // console.log("result : " + result);
@@ -89,7 +92,7 @@ class DataManager {
         urlList[0] = url;
 
         // set Asyncstorage items
-        for (var i = 0; i < urlList.length; i++) {
+        for (var i = 0; i < recentSearchListLength.length; i++) {
             if (urlList[i] === null) urlList[i] = '';
             AsyncStorage.setItem(this.recentKeyList[i], urlList[i]);
         }
@@ -97,10 +100,46 @@ class DataManager {
         // console.log(urlList);
         return urlList;
     }
-    setFavoriteList(urlList, url) {
-        if (urlList[0] === url || url === '') return urlList; // do nothing
+    // setFavoriteList(urlList, url) {
+    //     if (urlList[0] === url || url === '') return urlList; // do nothing
 
         
+    // }
+    deleteFromFavList(urlList, url) {
+        // console.log('### deleteFromFavList : ' + urlList + ' / ' + url)
+        
+        if (url === '' || urlList.length == 0 || urlList[0] === null || urlList[0] === '') {// do nothing
+            // console.log('do nothing')
+            return urlList;
+        }
+        
+        // get idx where url is in urlList
+        existIdx = - 1;
+        for (var i = 0; i < urlList.length; i++) {
+            if (urlList[i] === url) { // get url to front
+                existIdx = i;
+                break;
+            }
+        }
+        // console.log('## existIdx : ' + existIdx);
+        if (existIdx < 0) return urlList; // already not exist in favorite list
+        
+        // set Asyncstorage items
+        if (existIdx === urlList.length - 1) {
+            urlList[existIdx] = '';
+            AsyncStorage.setItem(this.favoriteKeyList[existIdx], '');
+            // console.log(urlList);
+            return urlList;
+        }
+        for (var i = existIdx; i < urlList.length - 1; i++) {
+            urlList[i] = urlList[i + 1];
+            AsyncStorage.setItem(this.favoriteKeyList[i], urlList[i]);
+        }
+        urlList[urlList.length - 1] = '';
+        AsyncStorage.setItem(this.favoriteKeyList[urlList.length - 1], '');
+
+        // console.log('urlList : ' + urlList);
+        return urlList;
     }
 
 
