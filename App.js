@@ -161,6 +161,7 @@ export default class App extends Component {
 
   //--------------------------- onPress
   _onPressStarButton() {
+    console.log('### ' + this.state.favoriteList);
     // console.log('favIncUrl : ' + favIncUrl);
     if (favIncUrl) {
       // delete from Favorite List
@@ -171,6 +172,11 @@ export default class App extends Component {
       })
     } else {
       // set to the top(= index 0) of Favorite List
+      tmp = dataManager.addFavoriteUrl(this.state.favoriteList, this.state.searchBarUrl)
+      console.log('tmp : ' + tmp);
+      this.setState({
+        favoriteList: tmp,
+      })
     }
   }
   _onPressSearchButton() {

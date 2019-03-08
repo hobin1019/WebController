@@ -107,11 +107,7 @@ class DataManager {
     // }
     deleteFromFavList(urlList, url) {
         // console.log('### deleteFromFavList : ' + urlList + ' / ' + url)
-        
-        if (url === '' || urlList.length == 0 || urlList[0] === null || urlList[0] === '') {// do nothing
-            // console.log('do nothing')
-            return urlList;
-        }
+        if (url === '' || urlList.length == 0 || urlList[0] === null || urlList[0] === '') {return urlList;}
         
         // get idx where url is in urlList
         existIdx = - 1;
@@ -140,6 +136,25 @@ class DataManager {
 
         // console.log('urlList : ' + urlList);
         return urlList;
+    }
+    addFavoriteUrl(urlList, url) {
+        if (urlList[0] === '') {
+            urlList[0] = url;
+            AsyncStorage.setItem(this.favoriteKeyList[0], url);
+            return urlList;
+        } else {
+            // set url to front
+            for (var i = urlList.length - 2; i >= 0; i--) {
+                urlList[i + 1] = urlList[i];
+            }
+            urlList[0] = url;
+
+            for (var i = 0; i < urlList.length; i++) {
+                AsyncStorage.setItem(this.favoriteKeyList[i], urlList[i]);
+            }
+            console.log('urlList : ' + urlList);
+            return urlList;
+        }
     }
 
 
