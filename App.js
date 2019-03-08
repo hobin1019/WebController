@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, StatusBar, TextInput, TouchableHighlight, Modal} from 'react-native';
+import {Platform, StyleSheet, Text, View, StatusBar, TextInput, TouchableHighlight, TouchableOpacity, Modal} from 'react-native';
 import Icon from 'react-native-ionicons'
 import Editor from './Editor'
 import WebPage from './WebPage'
@@ -15,6 +15,7 @@ const MENU_STATE = {
 }
 
 export default class App extends Component {
+  favIncUrl = false;
   constructor(props) {
     super(props);
 
@@ -35,7 +36,7 @@ export default class App extends Component {
       recentSearchList: [],
       modalVisible: false,
       opendModalState: 'recent',
-    } 
+    }
   }
   async componentDidMount(){
 
@@ -47,7 +48,9 @@ export default class App extends Component {
       recentSearchList: await dataManager.getRecentList(),
       favoriteList: await dataManager.getFavoriteList(),
     });
-    
+
+    // set searchUrl included in Favorite list
+    // console.log(favIncUrl);
     
     //test (remove later)... it`s tmp data
     // _onPressSearchButton();
@@ -70,8 +73,9 @@ export default class App extends Component {
   }
 
   render() {
-    console.log("render App.js")
+    // console.log("render App.js")
     const { htmlAddr, htmlSource, MenuState, modalVisible, opendModalState } = this.state;
+    favIncUrl = this.state.favoriteList.includes(this.state.searchBarUrl)
     return (
       <View style={styles.container}>
         <StatusBar hidden={false} barStyle='dark-content' />
@@ -89,6 +93,13 @@ export default class App extends Component {
       
         {/* search view */}
         <View style={styles.searchBar}>
+          <TouchableOpacity onPress={this._onPressSearchButton}>
+            <View>
+              {favIncUrl ?
+                <Icon style={{ marginLeft: 5 }} name='star' color='#FFBB00' size={20} />
+              : <Icon style={{ marginLeft: 5 }} name='star-outline' color='lightgray' size={20} />}
+            </View>
+          </TouchableOpacity>
           <View style={styles.searchBarTextInputView}
               backgroundColor='white'>
             <TextInput 
@@ -96,16 +107,18 @@ export default class App extends Component {
               placeholder='url here'
               value={this.state.searchBarUrl}
               onChangeText={(text) => {
-                console.log('text changed')
-                this.setState({searchBarUrl: text})
+                // console.log('text changed');
+                this.setState({
+                  searchBarUrl: text
+                });
               }}
             />
           </View>
-          <TouchableHighlight onPress={this._onPressSearchButton}>
+          <TouchableOpacity onPress={this._onPressSearchButton}>
               <View>
                 <Icon style={{marginRight: 5}} name='ios-search' color='white' size={20}/>
               </View>
-          </TouchableHighlight>
+          </TouchableOpacity>
         </View>
 
         {/* top view */}
