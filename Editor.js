@@ -26,7 +26,9 @@ export default class Editor extends Component {
                     onChangeText={(text) => {
                         this.setState({
                             htmlSource: text,
-                    })}}
+                        })
+                    }}
+                    returnKeyType='done'
                 />
                 <TouchableHighlight style={styles.saveButton} onPress={() => this.props.setHtmlSource(this.state.htmlSource)}>
                     <Text>저장</Text>

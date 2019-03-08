@@ -114,6 +114,7 @@ export default class App extends Component {
                   searchBarUrl: text
                 });
               }}
+              returnKeyType='done'
             />
           </View>
           <TouchableOpacity onPress={this._onPressSearchButton}>
