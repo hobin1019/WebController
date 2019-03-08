@@ -19,8 +19,7 @@ export default class App extends Component {
     super(props);
 
     this._onPressSearchButton = this._onPressSearchButton.bind(this);
-    this._onPressRecentSearchButton = this._onPressRecentSearchButton.bind(this);
-    this._onPressFavoriteButton = this._onPressFavoriteButton.bind(this);
+    this._onPressTopMenuButton = this._onPressTopMenuButton.bind(this);
     this._onPressWebButton = this._onPressWebButton.bind(this);
     this._onPressEditorButton = this._onPressEditorButton.bind(this);
     this._setHtmlSource = this._setHtmlSource.bind(this);
@@ -35,6 +34,7 @@ export default class App extends Component {
       favoriteList: [],
       recentSearchList: [],
       modalVisible: false,
+      opendModalState: 'recent',
     } 
   }
   async componentDidMount(){
@@ -45,6 +45,7 @@ export default class App extends Component {
     // dataManager.testRemoveMultiData();  //test (remove later)
     this.setState({
       recentSearchList: await dataManager.getRecentList(),
+      favoriteList: await dataManager.getFavoriteList(),
     });
     
     
@@ -62,20 +63,28 @@ export default class App extends Component {
     // this.setState({
     //   recentSearchList: tmp,
     // });
+
+    dataManager.testSetData();
+    // console.log('>> ' + this.state.favoriteList);
+    // dataManager.testRemoveMultiData();
   }
 
   render() {
     console.log("render App.js")
-    const {htmlAddr, htmlSource, MenuState, modalVisible} = this.state;
+    const { htmlAddr, htmlSource, MenuState, modalVisible, opendModalState } = this.state;
     return (
       <View style={styles.container}>
         <StatusBar hidden={false} barStyle='dark-content' />
         
-        <Modal visible={this.state.modalVisible} transparent={true}>
-          <RecentSearchView
-            urlList={this.state.recentSearchList}
-            setModalUnvisible={this._setModalUnvisible}
-            setSearchBarUrlAndSearch={(url) => this._setSearchBarUrlAndSearch(url)}/>
+        < Modal visible={modalVisible} transparent={true}>
+          {opendModalState !== '' ?
+            <RecentSearchView
+              opendModalState={opendModalState}
+              urlList={opendModalState === 'recent' ? this.state.recentSearchList : this.state.favoriteList}
+              setModalUnvisible={this._setModalUnvisible}
+              setSearchBarUrlAndSearch={(url) => this._setSearchBarUrlAndSearch(url)} />
+            : null
+          }
         </Modal>
       
         {/* search view */}
@@ -102,11 +111,11 @@ export default class App extends Component {
         {/* top view */}
         <View style={styles.topBar}>
           {/* 1. recent search button */}
-          <TouchableHighlight style={styles.menuRecent} onPress={this._onPressRecentSearchButton}>
+          <TouchableHighlight style={styles.menuRecent} onPress={() => this._onPressTopMenuButton(this.state.recentSearchList, 'recent')}>
             <Text style={styles.menuText}>최근 본 사이트</Text>
           </TouchableHighlight>
           {/* 2. favorite button */}
-          <TouchableHighlight style={styles.menuFavorite} onPress={this._onPressFavoriteButton}>
+          <TouchableHighlight style={styles.menuFavorite} onPress={() => this._onPressTopMenuButton(this.state.favoriteList, 'favorite')}>
             <Text style={styles.menuText}>즐겨찾기</Text>
           </TouchableHighlight>
         </View>
@@ -151,17 +160,17 @@ export default class App extends Component {
     })
     // console.log(this.state.recentSearchList);
   }
-  _onPressRecentSearchButton() {
-    if (this.state.recentSearchList.length === 0 || this.state.recentSearchList[0] === null || this.state.recentSearchList[0] === '') {
-      // console.log('_onPressRecentSearchButton return')
-      return;
-    }
-    this.setState({modalVisible: true})
-    console.log(this.state.recentSearchList);
+
+  _onPressTopMenuButton(list, flag) {
+    if (list === null || list.length === 0 || list[0] === null || list[0] === '') return;
+
+    this.setState({
+      modalVisible: true,
+      opendModalState: flag
+    })
+    console.log(list);
   }
-  _onPressFavoriteButton() {
-    console.log('_onPressFavoriteButton');
-  }
+
   _onPressWebButton() {
     // console.log('_onPressWebButton');
     if (this.state.MenuState === MENU_STATE.Web) {return;}
