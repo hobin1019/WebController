@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, TextInput, TouchableHighlight} from 'react-native';
+import {Platform, StyleSheet, Text, View, TextInput, TouchableHighlight, Keyboard} from 'react-native';
 
 export default class Editor extends Component {
     constructor(props) {
@@ -28,6 +28,7 @@ export default class Editor extends Component {
                             htmlSource: text,
                         })
                     }}
+                    onSubmitEditing={Keyboard.dismiss}
                     returnKeyType='done'
                 />
                 <TouchableHighlight style={styles.saveButton} onPress={() => this.props.setHtmlSource(this.state.htmlSource)}>
