@@ -38,6 +38,7 @@ export default class App extends Component {
       modalVisible: false,
       opendModalState: 'recent',
     }
+    // dataManager.testRemoveMultiData();
   }
   async componentDidMount(){
 
@@ -68,7 +69,7 @@ export default class App extends Component {
     //   recentSearchList: tmp,
     // });
 
-    dataManager.testSetData();
+    // dataManager.testSetData();
     // console.log('>> ' + this.state.favoriteList);
     // dataManager.testRemoveMultiData();
   }

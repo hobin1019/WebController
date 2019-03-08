@@ -23,7 +23,7 @@ class DataManager {
         // console.log(this.favoriteKeyList);
     }
 
-    testSetData() {
+    // testSetData() {
         // console.log('testSetData')
 
         // for (var i = 0; i < recentSearchListLength; i++) {
@@ -34,10 +34,10 @@ class DataManager {
         //     AsyncStorage.setItem(this.favoriteKeyList[i], 'hi ' + i.toString());
         // }
 
-        AsyncStorage.setItem(this.favoriteKeyList[0], 'https://m.naver.com/');
-    }
+        // AsyncStorage.setItem(this.favoriteKeyList[0], 'https://m.naver.com/');
+    // }
     testRemoveMultiData() {
-        // AsyncStorage.multiRemove(this.recentKeyList);
+        AsyncStorage.multiRemove(this.recentKeyList);
         AsyncStorage.multiRemove(this.favoriteKeyList);
     }
 
